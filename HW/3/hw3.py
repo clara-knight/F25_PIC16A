@@ -47,6 +47,12 @@ class LinkedList:
             self.set_last(self.first)
             self.len = 1
 
+    def insert_idx(self, data, idx):
+        if not idx:
+            self.prepend(data)
+        elif idx == self.len:
+            self.append(data)
+
     def set_first(self, node):
         self.first = node
 
