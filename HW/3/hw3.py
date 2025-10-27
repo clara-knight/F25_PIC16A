@@ -77,11 +77,21 @@ class LinkedList:
             self.set_last(self.first)
             self.len = 1
 
-    def insert_idx(self, data, idx):
+    def insert(self, data, idx):
         if not idx:
             self.prepend(data)
-        elif idx == self.len:
+        elif idx >= self.len:
             self.append(data)
+        else:
+            j = 1
+            current_node = self.get_first()
+            while j < idx:
+                print(f"Current node is {str(current_node)}")
+                current_node = current_node.get_next()
+                j += 1
+            newNode = Node(data)
+            newNode.set_next(current_node.get_next())
+            current_node.set_next(newNode)
 
     def set_first(self, node):
         self.first = node
