@@ -6,17 +6,11 @@ class Node:
     def __str__(self):
         return repr(self.data)
 
-    def set_next(self, next_node):
-        self.next = next_node
-
-    def get_next(self):
-        return self.next
-
-    def get_data(self):
-        return self.data
-
-    def print_data(self):
-        print(self.get_data())
+    def __eq__(self, other):
+        if isinstance(other, Node):
+            if self.data == other.data:
+                return True
+        return False
 
 
 class LinkedList:
@@ -27,6 +21,22 @@ class LinkedList:
         if isinstance(initializer_list, list):
             for d in initializer_list:
                 self.append(d)
+        else:
+            print("Argument is not a list.")
+
+    def __eq__(self, other):
+        if not isinstance(other, LinkedList):
+            return False
+        if len(self) != len(other):
+            return False
+        current_self_node = self.first
+        current_other_node = other.first
+        while current_self_node and current_other_node:
+            if current_self_node != current_other_node:
+                return False
+            current_self_node = current_self_node.next
+            current_other_node = current_other_node.next
+        return current_self_node == current_other_node
 
     def __len__(self):
         return self.len
@@ -37,10 +47,9 @@ class LinkedList:
             current_node = self.first
             while current_node:
                 self_list.append(str(current_node) + " -> ")
-                current_node = current_node.get_next()
+                current_node = current_node.next
             return "[" + "".join(self_list) + "]"
-        else:
-            return "Error: no nodes in linked list."
+        return "Error: no nodes in linked list."
 
     def __repr__(self):
         if self.first:
@@ -48,34 +57,27 @@ class LinkedList:
             current_node = self.first
             while current_node:
                 self_list.append(str(current_node))
-                current_node = current_node.get_next()
+                current_node = current_node.next
             return "LinkedList([" + ",".join(self_list) + "])"
-        else:
-            return "[]"
+        return "Linkedlist([])"
 
     def append(self, data):
         newNode = Node(data)
         if self.len:
-            self.last.set_next(newNode)
-            self.set_last(newNode)
-            self.len += 1
-
+            self.last.next = newNode
         else:
-            self.set_first(newNode)
-            self.set_last(self.first)
-            self.len = 1
+            self.first = newNode
+        self.last = newNode
+        self.len += 1
 
     def prepend(self, data):
         newNode = Node(data)
         if self.len:
-            newNode.set_next(self.first)
-            self.set_first(newNode)
-            self.len += 1
-
+            newNode.next = self.first
         else:
-            self.set_first(newNode)
-            self.set_last(self.first)
-            self.len = 1
+            self.last = self.first
+        self.first = newNode
+        self.len += 1
 
     def insert(self, data, idx):
         if not idx:
@@ -84,26 +86,10 @@ class LinkedList:
             self.append(data)
         else:
             j = 1
-            current_node = self.get_first()
+            current_node = self.first
             while j < idx:
-                print(f"Current node is {str(current_node)}")
-                current_node = current_node.get_next()
+                current_node = current_node.next
                 j += 1
             newNode = Node(data)
-            newNode.set_next(current_node.get_next())
-            current_node.set_next(newNode)
-
-    def set_first(self, node):
-        self.first = node
-
-    def set_last(self, node):
-        self.last = node
-
-    def get_first(self):
-        return self.first
-
-    def get_last(self):
-        return self.last
-
-    def get_length(self):
-        return self.len
+            newNode.next = current_node.next
+            current_node.next = newNode
