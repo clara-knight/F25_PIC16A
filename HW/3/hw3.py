@@ -18,11 +18,11 @@ class LinkedList:
         self.first = None
         self.last = None
         self.len = 0
-        if isinstance(initializer_list, list):
+        try:
             for d in initializer_list:
                 self.append(d)
-        else:
-            print("Argument is not a list.")
+        except Exception as e:
+            print(f"Error: {e}")
 
     def __eq__(self, other):
         if not isinstance(other, LinkedList):
@@ -61,23 +61,25 @@ class LinkedList:
             return "LinkedList([" + ",".join(self_list) + "])"
         return "Linkedlist([])"
 
-    def append(self, data):
-        newNode = Node(data)
-        if self.len:
-            self.last.next = newNode
-        else:
-            self.first = newNode
-        self.last = newNode
-        self.len += 1
+    def append(self, *data):
+        for d in data:
+            newNode = Node(d)
+            if self.len:
+                self.last.next = newNode
+            else:
+                self.first = newNode
+            self.last = newNode
+            self.len += 1
 
-    def prepend(self, data):
-        newNode = Node(data)
-        if self.len:
-            newNode.next = self.first
-        else:
-            self.last = self.first
-        self.first = newNode
-        self.len += 1
+    def prepend(self, *data):
+        for d in data:
+            newNode = Node(d)
+            if self.len:
+                newNode.next = self.first
+            else:
+                self.last = newNode
+            self.first = newNode
+            self.len += 1
 
     def insert(self, data, idx):
         if not idx:
