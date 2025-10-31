@@ -58,28 +58,26 @@ class LinkedList:
             while current_node:
                 self_list.append(str(current_node))
                 current_node = current_node.next
-            return "LinkedList([" + ",".join(self_list) + "])"
+            return "LinkedList([" + ", ".join(self_list) + "])"
         return "Linkedlist([])"
 
-    def append(self, *data):
-        for d in data:
-            newNode = Node(d)
-            if self.len:
-                self.last.next = newNode
-            else:
-                self.first = newNode
-            self.last = newNode
-            self.len += 1
-
-    def prepend(self, *data):
-        for d in data:
-            newNode = Node(d)
-            if self.len:
-                newNode.next = self.first
-            else:
-                self.last = newNode
+    def append(self, data):
+        newNode = Node(data)
+        if self.len:
+            self.last.next = newNode
+        else:
             self.first = newNode
-            self.len += 1
+        self.last = newNode
+        self.len += 1
+
+    def prepend(self, data):
+        newNode = Node(data)
+        if self.len:
+            newNode.next = self.first
+        else:
+            self.last = newNode
+        self.first = newNode
+        self.len += 1
 
     def insert(self, data, idx):
         if not idx:
@@ -95,3 +93,4 @@ class LinkedList:
             newNode = Node(data)
             newNode.next = current_node.next
             current_node.next = newNode
+            self.len += 1
