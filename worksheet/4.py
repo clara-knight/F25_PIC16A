@@ -22,7 +22,7 @@ def addition(n):
 
 # b
 def recursive_addition(n):
-    if n >= x
+    if n >= x:
         return n + recursive_addition(n - 1)
     else:
         return 0
