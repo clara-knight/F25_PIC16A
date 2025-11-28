@@ -1,7 +1,6 @@
 import numpy as np
 
 
-# 1
 def clean_data(data):
     cleaned_data = data.copy()
 
@@ -24,7 +23,6 @@ def clean_data(data):
     return cleaned_data
 
 
-# 2
 def filter_high_value(data, min_total=100):
 
     units_sold = data[:, 1]
@@ -36,7 +34,6 @@ def filter_high_value(data, min_total=100):
     return data[revenue_mask, :]
 
 
-# 3
 def region_summary(data):
     units_sold = data[:, 1]
     unit_price = data[:, 2]
@@ -54,7 +51,6 @@ def region_summary(data):
     return dict(zip(unique_regions, zip(*vals)))
 
 
-# 4
 def adjust_prices(data):
     adjusted_data = data.copy()
 
@@ -71,10 +67,8 @@ def adjust_prices(data):
     return adjusted_data
 
 
-# EXERCISE 2
-
-
 class GradeSystem:
+
     def __init__(self, hw, exam, hw_weight, exam_weights):
         if sum(exam_weights) + hw_weight != 1:
             raise ValueError("The sum of weights should be 1")
@@ -82,10 +76,11 @@ class GradeSystem:
             raise ValueError(
                 "The number of exams and the number of weights do not match"
             )
-        self.hw = hw
-        self.exam = exam
-        self.hw_weight = hw_weight
-        self.exam_weights = exam_weights
+        else:
+            self.hw = hw
+            self.exam = exam
+            self.hw_weight = hw_weight
+            self.exam_weights = exam_weights
 
     def hw_average_drop_lowest(self):
         sorted_hw = np.sort(self.hw, axis=1)[:, 1:]

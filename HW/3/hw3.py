@@ -94,3 +94,8 @@ class LinkedList:
             newNode.next = current_node.next
             current_node.next = newNode
             self.len += 1
+
+
+LL = LinkedList([1, 2, "3", 4])
+print(LL)
+print(repr(LL))
