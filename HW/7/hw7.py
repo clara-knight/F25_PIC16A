@@ -48,30 +48,84 @@ def facet_hist(groups, data, m_rows, m_cols, figsize):
 
 
 # 3
-url = "https://raw.githubusercontent.com/liaochunyang/PIC16/refs/heads/main/PIC16A/data/2019.csv"
-happiness = pd.read_csv(url)
-# # Warm up: generate scatterplot of overall score vs another column
-x = happiness["Social support"]
-y = happiness["Score"]
-plt.scatter(x, y)
-plt.xlabel("Social support")
-plt.ylabel("Score")
-# plt.show()
+#   url = "https://raw.githubusercontent.com/liaochunyang/PIC16/refs/heads/main/PIC16A/data/2019.csv"
+#   happiness = pd.read_csv(url)
+#   # # Warm up: generate scatterplot of overall score vs another column
+#   x = happiness["Social support"]
+#   y = happiness["Score"]
+#   # plt.scatter(x, y)
+#   # plt.xlabel("Social support")
+#   # plt.ylabel("Score")
+#   # plt.show()
+happiness = []
 
 
-cols = ["Score", "Social support", "GDP per capita"]
+cols = ["Score", "GDP per capita", "Social support"]
 
 
 def scatterplot_matrix(cols):
     total_variables = len(cols)
     fig, axarr = plt.subplots(total_variables, total_variables)
-    for i in range(total_variables):
-        x = happiness[cols[i]]
-        for j in range(total_variables):
+
+    for i, colname in enumerate(cols):
+        x = happiness[colname]
+        for j, rowname in enumerate(cols):
+            current_ax = axarr[i][j]
+            current_ax.set(xlabel=colname)
+            current_ax.set(ylabel=rowname)
             if i != j:
-                y = happiness[cols[j]]
-                axarr[i][j].scatter(x, y)
+                y = happiness[rowname]
+                current_ax.scatter(x, y)
+    plt.tight_layout()
     plt.show()
 
 
-scatterplot_matrix(cols)
+def scatterplot_matrix_corr(cols):
+    total_variables = len(cols)
+    fig, axarr = plt.subplots(total_variables, total_variables)
+
+    for i, colname in enumerate(cols):
+        x = happiness[colname]
+        for j, rowname in enumerate(cols):
+            y = happiness[rowname]
+            current_ax = axarr[i][j]
+            rho = np.corrcoef(x, y)[0][1]
+            current_ax.set(
+                title=f"{colname}",
+                xlabel=r"$\rho$ = " + str(np.round(rho, 3)),
+                ylabel=f"{rowname}",
+            )
+            if i != j:
+                current_ax.scatter(x, y)
+    plt.tight_layout()
+    plt.show()
+
+
+# scatterplot_matrix_corr(cols)
+
+url = "https://raw.githubusercontent.com/liaochunyang/PIC16/refs/heads/main/PIC16A/data/gapminder.csv"
+gapminder = pd.read_csv(url)
+
+
+def gapmider_visualization(gm):
+    unique_continents = gapminder["continent"].unique()
+    fig, axarr = plt.subplots(1, len(unique_continents))
+
+    continents_dict = dict(zip(unique_continents, axarr))
+
+    gm.set_index("year", inplace=True)
+
+    gm.groupby("country").apply(plot_country, cdict=continents_dict)
+
+    plt.tight_layout()
+    plt.show()
+
+
+def plot_country(gm_df, cdict):
+    continent = gm_df["continent"].iloc[0]
+    current_ax = cdict[continent]
+    # gm_df['lifeExp'].plot
+    current_ax.plot(gm_df["lifeExp"])
+
+
+gapmider_visualization(gapminder)
